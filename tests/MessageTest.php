@@ -27,4 +27,14 @@ class MessageTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('mock-correlation-id', $message->getCorrelationId());
     }
+
+    public function testMessageCreatedFromArrayHasJsonEncodedBody()
+    {
+        $data = ['mock-key'=>'mock-value'];
+
+        $message = Message::fromArray($data, 'mock-id');
+
+        $this->assertEquals('mock-id', $message->getCorrelationId());
+        $this->assertEquals($data, json_decode($message->getBody(), true));
+    }
 }
