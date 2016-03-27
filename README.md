@@ -33,6 +33,7 @@ $configuration = Alchemy\Queue\Amqp\AmqpConfiguration::parse([
     'dead-letter-exchange' => 'alchemy-dead-exchange',
     'queue' => 'alchemy-queue'
 ]);
+
 $factory = new Alchemy\Queue\Amqp\AmqpMessageQueueFactory($configuration);
 
 // Publish a message
@@ -40,5 +41,6 @@ $factory->getNamedQueue('my-queue')->publish(new Message('message body', 'correl
 
 // Consume next message in queue
 $handler = new Alchemy\Queue\NullMessageHandler();
-$factory->getNamedQueue('my-queue')->handle($handler);
+$resolver = new Alchemy\Queue\MessageHandlerResolver($handler);
+$factory->getNamedQueue('my-queue')->handle($resolver);
 ```
