@@ -17,3 +17,28 @@ the package in your project:
 ```
 composer require alchemy/queue-component
 ```
+
+## Quickstart guide
+
+```php
+// Note: the following array contains all available parameters and their default values
+// Every configuration key is optional, and its default value used when not defined in parameters
+$configuration = Alchemy\Queue\Amqp\AmqpConfiguration::parse([
+    'host' => 'localhost',
+    'vhost' => '/',
+    'port' => 5672,
+    'user' => 'guest',
+    'password' => 'guest',
+    'exchange' => 'alchemy-exchange',
+    'dead-letter-exchange' => 'alchemy-dead-exchange',
+    'queue' => 'alchemy-queue'
+]);
+$factory = new Alchemy\Queue\Amqp\AmqpMessageQueueFactory($configuration);
+
+// Publish a message
+$factory->getNamedQueue('my-queue')->publish(new Message('message body', 'correlation-id'));
+
+// Consume next message in queue
+$handler = new Alchemy\Queue\NullMessageHandler();
+$factory->getNamedQueue('my-queue')->handle($handler);
+```
