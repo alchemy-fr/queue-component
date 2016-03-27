@@ -1,0 +1,21 @@
+machine:
+  php:
+    version: 5.5.21
+  node:
+    version: stable
+  services:
+    - rabbitmq-server
+
+dependencies:
+  cache_directories:
+    - ~/.composer
+  pre:
+    - sudo apt-get install librabbitmq-dev
+    - pecl install amqp-1.4.0
+  override:
+    - composer install --no-progress --no-interaction --optimize-autoloader
+    
+test:
+  override:
+    - mkdir -p $CIRCLE_TEST_REPORTS/phpunit
+    - ./vendor/bin/phpunit --log-junit $CIRCLE_TEST_REPORTS/phpunit/junit.xml

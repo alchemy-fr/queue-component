@@ -1,0 +1,30 @@
+{
+  "name": "alchemy/queue-component",
+  "type": "library",
+  "description": "Message queue component",
+  "keywords": [],
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=5.5",
+    "ramsey/uuid": "^3.3"
+  },
+  "require-dev": {
+    "empi89/php-amqp-stubs": "dev-master",
+    "mikey179/vfsStream": "^1.6",
+    "phpunit/phpunit": "^4.0|^5.0"
+  },
+  "suggest": {
+    "ext-amqp": "To use the AMQP extension adapters"
+  },
+  "autoload": {
+    "psr-4": {
+      "Alchemy\\Queue\\": "src/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.1.x-dev"
+    }
+  }
+}
