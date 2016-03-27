@@ -9,18 +9,27 @@ class AmqpConfiguration
     {
         $configuration = new self();
 
-        $configuration->host = isset($parameters['host']) ? $parameters['host'] : $configuration->host;
-        $configuration->vhost = isset($parameters['vhost']) ? $parameters['vhost'] : $configuration->vhost;
-        $configuration->port = isset($parameters['port']) ? $parameters['port'] : $configuration->port;
-        $configuration->user = isset($parameters['user']) ? $parameters['user'] : $configuration->user;
-        $configuration->password = isset($parameters['password']) ? $parameters['password'] : $configuration->password;
-        $configuration->exchange = isset($parameters['exchange']) ? $parameters['exchange'] : $configuration->exchange;
-        $configuration->deadLetterExchange = isset($parameters['dead-letter-exchange']) ?
-            $parameters['dead-letter-exchange'] :
-            $configuration->deadLetterExchange;
-        $configuration->queue = isset($parameters['queue']) ? $parameters['queue'] : $configuration->queue;
+        $configuration->host = self::extractValueOrDefault($parameters, 'host', $configuration->host);
+        $configuration->vhost = self::extractValueOrDefault($parameters, 'vhost', $configuration->vhost);
+        $configuration->port = self::extractValueOrDefault($parameters, 'port', $configuration->port);
+        $configuration->user = self::extractValueOrDefault($parameters, 'user', $configuration->user);
+        $configuration->password = self::extractValueOrDefault($parameters, 'password', $configuration->password);
+        $configuration->exchange = self::extractValueOrDefault($parameters, 'exchange', $configuration->exchange);
+
+        $configuration->deadLetterExchange = self::extractValueOrDefault(
+            $parameters,
+            'dead-letter-exchange',
+            $configuration->deadLetterExchange
+        );
+
+        $configuration->queue = self::extractValueOrDefault($parameters, 'queue', $configuration->queue);
 
         return $configuration;
+    }
+
+    private static function extractValueOrDefault(array $parameters, $key, $default = null)
+    {
+        return isset($parameters[$key]) ? $parameters[$key] : $default;
     }
 
     private $host = 'localhost';
