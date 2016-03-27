@@ -4,7 +4,10 @@ namespace Alchemy\Queue\Amqp;
 
 class AmqpConfiguration
 {
-
+    /**
+     * @param array $parameters
+     * @return AmqpConfiguration
+     */
     public static function parse(array $parameters)
     {
         $configuration = new self();
@@ -27,25 +30,55 @@ class AmqpConfiguration
         return $configuration;
     }
 
+    /**
+     * @param array $parameters
+     * @param string $key
+     * @param mixed|null $default
+     * @return mixed Value set in array or default value
+     */
     private static function extractValueOrDefault(array $parameters, $key, $default = null)
     {
         return isset($parameters[$key]) ? $parameters[$key] : $default;
     }
 
+    /**
+     * @var string
+     */
     private $host = 'localhost';
 
+    /**
+     * @var string
+     */
     private $vhost = '/';
 
+    /**
+     * @var int
+     */
     private $port = 5672;
 
+    /**
+     * @var string
+     */
     private $user = 'guest';
 
+    /**
+     * @var string
+     */
     private $password = 'guest';
 
+    /**
+     * @var string
+     */
     private $deadLetterExchange = 'alchemy-dead-exchange';
 
+    /**
+     * @var string
+     */
     private $exchange = 'alchemy-exchange';
 
+    /**
+     * @var string
+     */
     private $queue = 'alchemy-queue';
 
     /**
