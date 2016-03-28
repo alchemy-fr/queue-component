@@ -1,11 +1,11 @@
 # queue-component
 
-[![License    ][badge-license  ]][license]
-[![Packagist  ][badge-packagist]][packagist]
-[![Travis     ][badge-travis   ]][travis]
-[![Coverage   ][badge-coverage ]][coverage]
-[![Scrutinizer][badge-quality  ]][quality]
-[![Packagist  ][badge-downloads]][downloads]
+[![License][badge-license]][license]
+[![Packagist][badge-packagist]][packagist]
+[![Travis][badge-travis]][travis]
+[![Coverage][badge-coverage]][coverage]
+[![Scrutinizer][badge-quality]][quality]
+[![Packagist][badge-downloads]][downloads]
 
 alchemy/queue-component is a library providing a minimalist publish/subscribe abstraction over AMQP
 
@@ -45,16 +45,16 @@ $resolver = new Alchemy\Queue\MessageHandlerResolver($handler);
 $factory->getNamedQueue('my-queue')->handle($resolver);
 ```
 
-[badge-license  ]: https://img.shields.io/packagist/l/alchemy/queue-component.svg?style=flat-square
+[badge-license]: https://img.shields.io/packagist/l/alchemy/queue-component.svg?style=flat-square
 [badge-packagist]: https://img.shields.io/packagist/v/alchemy/queue-component.svg?style=flat-square
-[badge-travis   ]: https://img.shields.io/travis/alchemy-fr/queue-component.svg?style=flat-square
-[badge-coverage ]: https://img.shields.io/scrutinizer/coverage/g/alchemy-fr/queue-component.svg?style=flat-square
-[badge-quality  ]: https://img.shields.io/scrutinizer/g/alchemy-fr/queue-component.svg?style=flat-square
+[badge-travis]: https://img.shields.io/travis/alchemy-fr/queue-component.svg?style=flat-square
+[badge-coverage]: https://img.shields.io/scrutinizer/coverage/g/alchemy-fr/queue-component.svg?style=flat-square
+[badge-quality]: https://img.shields.io/scrutinizer/g/alchemy-fr/queue-component.svg?style=flat-square
 [badge-downloads]: https://img.shields.io/packagist/dt/alchemy/queue-component.svg?style=flat-square
 
-[license   ]: https://github.com/alchemy-fr/queue-component/LICENSE
-[packagist ]: https://packagist.org/packages/alchemy/queue-component
-[travis    ]: https://travis-ci.org/alchemy-fr/queue-component
-[coverage  ]: https://scrutinizer-ci.com/g/alchemy-fr/queue-component/?branch=master
-[quality   ]: https://scrutinizer-ci.com/g/alchemy-fr/queue-component/
-[downloads ]: https://packagist.org/packages/alchemy/queue-component/stats
+[license]: https://github.com/alchemy-fr/queue-component/LICENSE
+[packagist]: https://packagist.org/packages/alchemy/queue-component
+[travis]: https://travis-ci.org/alchemy-fr/queue-component
+[coverage]: https://scrutinizer-ci.com/g/alchemy-fr/queue-component/?branch=master
+[quality]: https://scrutinizer-ci.com/g/alchemy-fr/queue-component/
+[downloads]: https://packagist.org/packages/alchemy/queue-component/stats
