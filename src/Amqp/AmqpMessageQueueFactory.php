@@ -8,6 +8,15 @@ use Alchemy\Queue\MessageQueueFactory;
 class AmqpMessageQueueFactory implements MessageQueueFactory
 {
     /**
+     * @param array $configuration
+     * @return AmqpMessageQueueFactory
+     */
+    public static function create(array $configuration = [])
+    {
+        return new self(AmqpConfiguration::parse($configuration));
+    }
+
+    /**
      * @var AmqpConfiguration
      */
     private $configuration;

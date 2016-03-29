@@ -23,7 +23,7 @@ composer require alchemy/queue-component
 ```php
 // Note: the following array contains all available parameters and their default values
 // Every configuration key is optional, and its default value used when not defined in parameters
-$configuration = Alchemy\Queue\Amqp\AmqpConfiguration::parse([
+$parameters = [
     'host' => 'localhost',
     'vhost' => '/',
     'port' => 5672,
@@ -32,9 +32,9 @@ $configuration = Alchemy\Queue\Amqp\AmqpConfiguration::parse([
     'exchange' => 'alchemy-exchange',
     'dead-letter-exchange' => 'alchemy-dead-exchange',
     'queue' => 'alchemy-queue'
-]);
+];
 
-$factory = new Alchemy\Queue\Amqp\AmqpMessageQueueFactory($configuration);
+$factory = Alchemy\Queue\Amqp\AmqpMessageQueueFactory::create($parameters);
 
 // Publish a message
 $factory->getNamedQueue('my-queue')->publish(new Message('message body', 'correlation-id'));
