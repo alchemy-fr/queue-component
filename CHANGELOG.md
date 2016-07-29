@@ -6,7 +6,7 @@
 ### Added
   - Add a changelog
   - Add `AmqpFactory::create()` factory method to simplify initialisation
-  - 
+
 ### Fixed
   - Quickstart code sample contained an error
 
