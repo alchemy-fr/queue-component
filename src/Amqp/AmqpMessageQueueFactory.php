@@ -4,16 +4,20 @@ namespace Alchemy\Queue\Amqp;
 
 use Alchemy\Queue\MessageQueue;
 use Alchemy\Queue\MessageQueueFactory;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
-class AmqpMessageQueueFactory implements MessageQueueFactory
+class AmqpMessageQueueFactory implements MessageQueueFactory, LoggerAwareInterface
 {
     /**
      * @param array $configuration
+     * @param LoggerInterface $logger
      * @return AmqpMessageQueueFactory
      */
-    public static function create(array $configuration = [])
+    public static function create(array $configuration = [], LoggerInterface $logger = null)
     {
-        return new self(AmqpConfiguration::parse($configuration));
+        return new self(AmqpConfiguration::parse($configuration), $logger);
     }
 
     /**
@@ -36,9 +40,26 @@ class AmqpMessageQueueFactory implements MessageQueueFactory
      */
     private $channel;
 
-    public function __construct(AmqpConfiguration $configuration = null)
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(AmqpConfiguration $configuration = null, LoggerInterface $logger = null)
     {
         $this->configuration = $configuration ?: new AmqpConfiguration();
+        $this->logger = $logger ?: new NullLogger();
+    }
+
+    /**
+     * Sets a logger instance on the object
+     *
+     * @param LoggerInterface $logger
+     * @return null
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
     }
 
     /**
@@ -71,8 +92,13 @@ class AmqpMessageQueueFactory implements MessageQueueFactory
         $queue->declareQueue();
         $queue->bind($exchange->getName(), $queueName);
 
-        return new AmqpMessageQueue($exchange, $queue);
+        $messageQueue = new AmqpMessageQueue($exchange, $queue);
+
+        $messageQueue->setLogger($this->logger);
+
+        return $messageQueue;
     }
+
 
     protected function declareExchange()
     {
@@ -90,7 +116,6 @@ class AmqpMessageQueueFactory implements MessageQueueFactory
 
         return $this->exchange;
     }
-
 
     /**
      * @return \AMQPConnection

@@ -2,8 +2,6 @@
 
 namespace Alchemy\Queue;
 
-use Alchemy\Queue\NullMessageHandler;
-
 class MessageHandlerResolver
 {
     /**

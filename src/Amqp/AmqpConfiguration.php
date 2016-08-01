@@ -69,7 +69,7 @@ class AmqpConfiguration
     /**
      * @var string
      */
-    private $deadLetterExchange = 'alchemy-dead-exchange';
+    private $deadLetterExchange = '';
 
     /**
      * @var string

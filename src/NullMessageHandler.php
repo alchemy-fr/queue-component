@@ -5,9 +5,33 @@ namespace Alchemy\Queue;
 use Alchemy\Queue\Message;
 use Alchemy\Queue\MessageHandler;
 use Alchemy\Queue\MessageHandlingException;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
-class NullMessageHandler implements MessageHandler
+class NullMessageHandler implements MessageHandler, LoggerAwareInterface
 {
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    public function __construct(LoggerInterface $logger = null)
+    {
+        $this->logger = $logger ?: new NullLogger();
+    }
+
+    /**
+     * Sets a logger instance on the object
+     *
+     * @param LoggerInterface $logger
+     * @return null
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     /**
      * @param Message $message
      * @return bool

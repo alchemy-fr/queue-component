@@ -7,8 +7,12 @@ use Alchemy\Queue\MessageHandlerResolver;
 use Alchemy\Queue\MessageHandlingException;
 use Alchemy\Queue\MessagePublishingException;
 use Alchemy\Queue\MessageQueue;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
+use Ramsey\Uuid\Uuid;
 
-class AmqpMessageQueue implements MessageQueue
+class AmqpMessageQueue implements MessageQueue, LoggerAwareInterface
 {
     /**
      * @var \AMQPExchange
@@ -20,10 +24,27 @@ class AmqpMessageQueue implements MessageQueue
      */
     private $queue;
 
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     public function __construct(\AMQPExchange $exchange, \AMQPQueue $queue)
     {
         $this->exchange = $exchange;
         $this->queue = $queue;
+        $this->logger = new NullLogger();
+    }
+
+    /**
+     * Sets a logger instance on the object
+     *
+     * @param LoggerInterface $logger
+     * @return null
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
     }
 
     /**
@@ -31,6 +52,8 @@ class AmqpMessageQueue implements MessageQueue
      */
     public function publish(Message $message)
     {
+        $this->logger->debug('Publishing message to queue: ' . $this->queue->getName());
+
         $attributes = ['correlation_id' => $message->getCorrelationId()];
         $result = $this->exchange->publish($message->getBody(), $this->queue->getName(), AMQP_DURABLE, $attributes);
 
@@ -44,28 +67,42 @@ class AmqpMessageQueue implements MessageQueue
      */
     public function handle(MessageHandlerResolver $resolver)
     {
+        $this->logger->debug('Consuming messages from AMQP queue: ' . $this->queue->getName());
+
         $this->queue->consume(function (\AMQPEnvelope $envelope) use ($resolver) {
             $message = new Message($envelope->getBody(), $envelope->getCorrelationId());
             $handler = $resolver->resolveHandler($message);
 
             try {
+                $this->logger->debug('Dispatching message to handler');
                 $handler->handle($message);
                 $this->ackMessage($envelope);
             } catch (MessageHandlingException $exception) {
+                $this->logger->error('Caught exception while handling message: ' . $exception->getMessage());
                 $this->nackMessage($envelope);
             }
 
             return false;
-        }, AMQP_NOPARAM);
+        }, AMQP_NOPARAM, Uuid::uuid4());
     }
 
     private function ackMessage(\AMQPEnvelope $envelope)
     {
+        $this->logger->debug('ACK message', [
+            'correlation_id' => $envelope->getCorrelationId(),
+            'body' => $envelope->getBody()
+        ]);
+
         $this->queue->ack($envelope->getDeliveryTag(), AMQP_NOPARAM);
     }
 
     private function nackMessage(\AMQPEnvelope $envelope)
     {
+        $this->logger->debug('NACK message', [
+            'correlation_id' => $envelope->getCorrelationId(),
+            'body' => $envelope->getBody()
+        ]);
+
         $this->queue->nack($envelope->getDeliveryTag(), AMQP_NOPARAM);
     }
 }

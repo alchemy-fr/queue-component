@@ -7,7 +7,8 @@
   "minimum-stability": "stable",
   "require": {
     "php": ">=5.5",
-    "ramsey/uuid": "^3.3"
+    "ramsey/uuid": "^3.3",
+    "psr/log": "^1.0"
   },
   "require-dev": {
     "empi89/php-amqp-stubs": "dev-master",
