@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+No unreleased changes
+
 ## [0.1.2] - 2016-08-01
 ### Added
   - Add dependency on psr/log to enable debug logging in queue wrappers
