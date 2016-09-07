@@ -69,40 +69,40 @@ class AmqpMessageQueue implements MessageQueue, LoggerAwareInterface
     {
         $this->logger->debug('Consuming messages from AMQP queue: ' . $this->queue->getName());
 
-        $this->queue->consume(function (\AMQPEnvelope $envelope) use ($resolver) {
+        $this->queue->consume(function (\AMQPEnvelope $envelope, \AMQPQueue $queue) use ($resolver) {
             $message = new Message($envelope->getBody(), $envelope->getCorrelationId());
             $handler = $resolver->resolveHandler($message);
 
             try {
                 $this->logger->debug('Dispatching message to handler');
                 $handler->handle($message);
-                $this->ackMessage($envelope);
+                $this->ackMessage($queue, $envelope);
             } catch (MessageHandlingException $exception) {
                 $this->logger->error('Caught exception while handling message: ' . $exception->getMessage());
-                $this->nackMessage($envelope);
+                $this->nackMessage($queue, $envelope);
             }
 
             return false;
         }, AMQP_NOPARAM, Uuid::uuid4());
     }
 
-    private function ackMessage(\AMQPEnvelope $envelope)
+    private function ackMessage(\AMQPQueue $queue, \AMQPEnvelope $envelope)
     {
         $this->logger->debug('ACK message', [
             'correlation_id' => $envelope->getCorrelationId(),
             'body' => $envelope->getBody()
         ]);
 
-        $this->queue->ack($envelope->getDeliveryTag(), AMQP_NOPARAM);
+        $queue->ack($envelope->getDeliveryTag(), AMQP_NOPARAM);
     }
 
-    private function nackMessage(\AMQPEnvelope $envelope)
+    private function nackMessage(\AMQPQueue $queue, \AMQPEnvelope $envelope)
     {
         $this->logger->debug('NACK message', [
             'correlation_id' => $envelope->getCorrelationId(),
             'body' => $envelope->getBody()
         ]);
 
-        $this->queue->nack($envelope->getDeliveryTag(), AMQP_NOPARAM);
+        $queue->nack($envelope->getDeliveryTag(), AMQP_NOPARAM);
     }
 }

@@ -124,6 +124,11 @@ class AmqpMessageQueueFactory implements MessageQueueFactory, LoggerAwareInterfa
     {
         if ($this->connection == null) {
             $this->connection = new \AMQPConnection($this->configuration->toConnectionArray());
+
+            if ($this->configuration->getTimeout() > 0) {
+                $this->connection->setTimeout($this->configuration->getTimeout());
+            }
+
             $this->connection->connect();
         }
 
