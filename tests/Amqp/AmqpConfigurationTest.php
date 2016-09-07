@@ -17,7 +17,7 @@ class AmqpConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('guest', $configuration->getUser());
         $this->assertEquals('guest', $configuration->getPassword());
         $this->assertEquals('alchemy-exchange', $configuration->getExchange());
-        $this->assertEquals('alchemy-dead-exchange', $configuration->getDeadLetterExchange());
+        $this->assertEquals('', $configuration->getDeadLetterExchange());
         $this->assertEquals('alchemy-queue', $configuration->getQueue());
 
         $configuration = AmqpConfiguration::parse([]);
@@ -28,7 +28,7 @@ class AmqpConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('guest', $configuration->getUser());
         $this->assertEquals('guest', $configuration->getPassword());
         $this->assertEquals('alchemy-exchange', $configuration->getExchange());
-        $this->assertEquals('alchemy-dead-exchange', $configuration->getDeadLetterExchange());
+        $this->assertEquals('', $configuration->getDeadLetterExchange());
         $this->assertEquals('alchemy-queue', $configuration->getQueue());
     }
 
