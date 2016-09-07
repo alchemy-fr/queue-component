@@ -70,8 +70,8 @@ class AmqpMessageQueueTest extends \PHPUnit_Framework_TestCase
         $queue->ack('mock-delivery-tag', Argument::type('int'))->shouldBeCalled();
         $queue->nack('mock-delivery-tag', Argument::type('int'))->shouldNotBeCalled();
         $queue->getName()->willReturn('mock-queue');
-        $queue->consume(Argument::type(\Closure::class), Argument::any(), Argument::any())->will(function ($args) use ($envelope) {
-            $args[0]($envelope->reveal());
+        $queue->consume(Argument::type(\Closure::class), Argument::any(), Argument::any())->will(function ($args) use ($envelope, $queue) {
+            $args[0]($envelope->reveal(), $queue->reveal());
         });
 
         $messageQueue = new AmqpMessageQueue($exchange->reveal(), $queue->reveal());
@@ -101,8 +101,8 @@ class AmqpMessageQueueTest extends \PHPUnit_Framework_TestCase
         $queue->nack('mock-delivery-tag', Argument::type('int'))->shouldBeCalled();
         $queue->ack('mock-delivery-tag', Argument::type('int'))->shouldNotBeCalled();
         $queue->getName()->willReturn('mock-queue');
-        $queue->consume(Argument::type(\Closure::class), Argument::any(), Argument::any())->will(function ($args) use ($envelope) {
-            $args[0]($envelope->reveal());
+        $queue->consume(Argument::type(\Closure::class), Argument::any(), Argument::any())->will(function ($args) use ($envelope, $queue) {
+            $args[0]($envelope->reveal(), $queue->reveal());
         });
 
         $messageQueue = new AmqpMessageQueue($exchange->reveal(), $queue->reveal());
