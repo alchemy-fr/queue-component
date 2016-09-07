@@ -1,8 +1,8 @@
 # CHANGELOG
 
 ## Unreleased
-
-No unreleased changes
+### Added
+  - Add `timeout` option to AMQP configuration for consume timeouts
 
 ## [0.1.2] - 2016-08-01
 ### Added
