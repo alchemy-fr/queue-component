@@ -18,6 +18,7 @@ class AmqpConfiguration
         $configuration->user = self::extractValueOrDefault($parameters, 'user', $configuration->user);
         $configuration->password = self::extractValueOrDefault($parameters, 'password', $configuration->password);
         $configuration->exchange = self::extractValueOrDefault($parameters, 'exchange', $configuration->exchange);
+        $configuration->timeout = self::extractValueOrDefault($parameters, 'timeout', $configuration->timeout);
 
         $configuration->deadLetterExchange = self::extractValueOrDefault(
             $parameters,
@@ -82,6 +83,11 @@ class AmqpConfiguration
     private $queue = 'alchemy-queue';
 
     /**
+     * @var int
+     */
+    private $timeout = 0;
+
+    /**
      * @return string
      */
     public function getHost()
@@ -143,6 +149,14 @@ class AmqpConfiguration
     public function getQueue()
     {
         return $this->queue;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimeout()
+    {
+        return $this->timeout;
     }
 
     public function toConnectionArray()
