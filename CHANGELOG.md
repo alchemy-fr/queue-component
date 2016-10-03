@@ -4,6 +4,10 @@
 
 No unreleased changes
 
+## [0.1.4] - 2016-10-03
+### Added
+  - Queue registry class
+
 ## [0.1.3] - 2016-09-07
 ### Added
   - Add `timeout` option to AMQP configuration for consume timeouts
