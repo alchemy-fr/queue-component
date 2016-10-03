@@ -16,7 +16,7 @@ use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-class QueueRegistry implements LoggerAwareInterface
+class MessageQueueRegistry implements LoggerAwareInterface
 {
     /**
      * @var array
@@ -45,6 +45,11 @@ class QueueRegistry implements LoggerAwareInterface
     public function bindConfiguration($queueName, array $configuration)
     {
         $this->configurations[$queueName] = $configuration;
+    }
+
+    public function hasQueue($queueName)
+    {
+        return isset($this->queues[$queueName]) || isset($this->configurations[$queueName]);
     }
 
     /**
