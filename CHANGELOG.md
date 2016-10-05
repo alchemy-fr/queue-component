@@ -4,6 +4,10 @@
 
 No unreleased changes
 
+## [0.1.5] - 2016-10-05
+### Added
+  - `MessageQueueRegistry::getConfigurations()` to retrieve available queue configurations
+
 ## [0.1.4] - 2016-10-03
 ### Added
   - Queue registry class
