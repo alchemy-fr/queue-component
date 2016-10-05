@@ -47,6 +47,11 @@ class MessageQueueRegistry implements LoggerAwareInterface
         $this->configurations[$queueName] = $configuration;
     }
 
+    public function getConfigurations()
+    {
+        return $this->configurations;
+    }
+
     public function hasQueue($queueName)
     {
         return isset($this->queues[$queueName]) || isset($this->configurations[$queueName]);
