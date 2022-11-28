@@ -12,7 +12,7 @@
   },
   "require-dev": {
     "empi89/php-amqp-stubs": "dev-master",
-    "mikey179/vfsStream": "^1.6",
+    "mikey179/vfsstream": "^1.6",
     "phpunit/phpunit": "^4.0|^5.0"
   },
   "suggest": {
