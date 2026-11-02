@@ -66,7 +66,8 @@ class AmqpConfigurationTest extends \PHPUnit\Framework\TestCase
             'port' => 5672,
             'vhost' => '/',
             'login' => 'guest',
-            'password' => 'guest'
+            'password' => 'guest',
+            'ssl' => false
         ];
 
         $this->assertEquals($expected, $configuration->toConnectionArray());
