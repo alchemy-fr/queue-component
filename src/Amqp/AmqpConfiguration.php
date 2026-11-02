@@ -5,6 +5,11 @@ namespace Alchemy\Queue\Amqp;
 class AmqpConfiguration
 {
     /**
+     * @var boolean
+     */
+    private $ssl = false;
+
+    /**
      * @param array $parameters
      * @return AmqpConfiguration
      */
@@ -13,6 +18,7 @@ class AmqpConfiguration
         $configuration = new self();
 
         $configuration->host = self::extractValueOrDefault($parameters, 'host', $configuration->host);
+        $configuration->ssl = self::extractValueOrDefault($parameters, 'ssl', $configuration->ssl);
         $configuration->vhost = self::extractValueOrDefault($parameters, 'vhost', $configuration->vhost);
         $configuration->port = self::extractValueOrDefault($parameters, 'port', $configuration->port);
         $configuration->user = self::extractValueOrDefault($parameters, 'user', $configuration->user);
@@ -163,6 +169,7 @@ class AmqpConfiguration
     {
         return [
             'host' => $this->host,
+            'ssl' => $this->ssl,
             'port' => $this->port,
             'vhost' => $this->vhost,
             'login' => $this->user,
