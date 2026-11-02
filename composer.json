@@ -6,7 +6,7 @@
     "license": "MIT",
     "minimum-stability": "stable",
     "require": {
-        "php": "^8.5",
+        "php": "^8.2",
         "ramsey/uuid": "^4.7",
         "psr/log": "^1.0 || ^2.0 || ^3.0"
     },
