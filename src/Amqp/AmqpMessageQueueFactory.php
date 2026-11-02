@@ -15,7 +15,7 @@ class AmqpMessageQueueFactory implements MessageQueueFactory, LoggerAwareInterfa
      * @param LoggerInterface $logger
      * @return AmqpMessageQueueFactory
      */
-    public static function create(array $configuration = [], LoggerInterface $logger = null)
+    public static function create(array $configuration = [], ?LoggerInterface $logger = null)
     {
         return new self(AmqpConfiguration::parse($configuration), $logger);
     }
@@ -45,7 +45,7 @@ class AmqpMessageQueueFactory implements MessageQueueFactory, LoggerAwareInterfa
      */
     private $logger;
 
-    public function __construct(AmqpConfiguration $configuration = null, LoggerInterface $logger = null)
+    public function __construct(?AmqpConfiguration $configuration = null, ?LoggerInterface $logger = null)
     {
         $this->configuration = $configuration ?: new AmqpConfiguration();
         $this->logger = $logger ?: new NullLogger();
@@ -55,9 +55,8 @@ class AmqpMessageQueueFactory implements MessageQueueFactory, LoggerAwareInterfa
      * Sets a logger instance on the object
      *
      * @param LoggerInterface $logger
-     * @return null
      */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
@@ -85,7 +84,7 @@ class AmqpMessageQueueFactory implements MessageQueueFactory, LoggerAwareInterfa
         $queue->setName($queueName);
         $queue->setFlags(AMQP_DURABLE);
 
-        if (trim($errorExchangeName) != '') {
+        if (trim((string) $errorExchangeName) != '') {
             $queue->setArgument('x-dead-letter-exchange', $errorExchangeName);
         }
 
@@ -126,7 +125,7 @@ class AmqpMessageQueueFactory implements MessageQueueFactory, LoggerAwareInterfa
             $this->connection = new \AMQPConnection($this->configuration->toConnectionArray());
 
             if ($this->configuration->getTimeout() > 0) {
-                $this->connection->setTimeout($this->configuration->getTimeout());
+                $this->connection->setReadTimeout($this->configuration->getTimeout());
             }
 
             $this->connection->connect();

@@ -9,9 +9,12 @@ use Alchemy\Queue\MessageHandlerResolver;
 use Alchemy\Queue\MessageHandlingException;
 use Alchemy\Queue\MessagePublishingException;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 
-class AmqpMessageQueueTest extends \PHPUnit_Framework_TestCase
+class AmqpMessageQueueTest extends \PHPUnit\Framework\TestCase
 {
+    use ProphecyTrait;
+
     public function testMessagesArePublishedInExchange()
     {
         /** @var \AMQPExchange $exchange */
@@ -21,7 +24,7 @@ class AmqpMessageQueueTest extends \PHPUnit_Framework_TestCase
 
         $queue->getName()->willReturn('mock-queue');
         $exchange->publish('mock-body', 'mock-queue', Argument::type('int'), ['correlation_id' => 'mock-id'])
-            ->willReturn(true);
+            ->shouldBeCalled();
 
         $messageQueue = new AmqpMessageQueue($exchange->reveal(), $queue->reveal());
         $message = new Message('mock-body', 'mock-id');
@@ -38,12 +41,12 @@ class AmqpMessageQueueTest extends \PHPUnit_Framework_TestCase
 
         $queue->getName()->willReturn('mock-queue');
         $exchange->publish('mock-body', 'mock-queue', Argument::type('int'), ['correlation_id' => 'mock-id'])
-            ->willReturn(false);
+            ->willThrow(new \AMQPExchangeException('Publishing failed.'));
 
         $messageQueue = new AmqpMessageQueue($exchange->reveal(), $queue->reveal());
         $message = new Message('mock-body', 'mock-id');
 
-        $this->setExpectedException(MessagePublishingException::class);
+        $this->expectException(MessagePublishingException::class);
 
         $messageQueue->publish($message);
     }
@@ -65,10 +68,10 @@ class AmqpMessageQueueTest extends \PHPUnit_Framework_TestCase
 
         $envelope->getBody()->willReturn('mock-body');
         $envelope->getCorrelationId()->willReturn('mock-correlation-id');
-        $envelope->getDeliveryTag()->willReturn('mock-delivery-tag');
+        $envelope->getDeliveryTag()->willReturn(42);
 
-        $queue->ack('mock-delivery-tag', Argument::type('int'))->shouldBeCalled();
-        $queue->nack('mock-delivery-tag', Argument::type('int'))->shouldNotBeCalled();
+        $queue->ack(42, Argument::type('int'))->shouldBeCalled();
+        $queue->nack(42, Argument::type('int'))->shouldNotBeCalled();
         $queue->getName()->willReturn('mock-queue');
         $queue->consume(Argument::type(\Closure::class), Argument::any(), Argument::any())->will(function ($args) use ($envelope, $queue) {
             $args[0]($envelope->reveal(), $queue->reveal());
@@ -96,10 +99,10 @@ class AmqpMessageQueueTest extends \PHPUnit_Framework_TestCase
 
         $envelope->getBody()->willReturn('mock-body');
         $envelope->getCorrelationId()->willReturn('mock-correlation-id');
-        $envelope->getDeliveryTag()->willReturn('mock-delivery-tag');
+        $envelope->getDeliveryTag()->willReturn(42);
 
-        $queue->nack('mock-delivery-tag', Argument::type('int'))->shouldBeCalled();
-        $queue->ack('mock-delivery-tag', Argument::type('int'))->shouldNotBeCalled();
+        $queue->nack(42, Argument::type('int'))->shouldBeCalled();
+        $queue->ack(42, Argument::type('int'))->shouldNotBeCalled();
         $queue->getName()->willReturn('mock-queue');
         $queue->consume(Argument::type(\Closure::class), Argument::any(), Argument::any())->will(function ($args) use ($envelope, $queue) {
             $args[0]($envelope->reveal(), $queue->reveal());

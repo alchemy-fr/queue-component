@@ -7,26 +7,29 @@ use Alchemy\Queue\Amqp\AmqpMessageQueueFactory;
 use Alchemy\Queue\Message;
 use Alchemy\Queue\MessageHandler;
 use Alchemy\Queue\MessageHandlerResolver;
+use Alchemy\Queue\Tests\RequiresAmqpServer;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
 
-class AmqpMessageQueueFactoryTest extends \PHPUnit_Framework_TestCase
+class AmqpMessageQueueFactoryTest extends \PHPUnit\Framework\TestCase
 {
+    use ProphecyTrait;
+    use RequiresAmqpServer;
+
     /**
      * @var AmqpConfiguration
      */
     private $configuration;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->configuration = AmqpConfiguration::parse([
-            'host' => '127.0.0.1',
-            'user' => '',
-            'password' => ''
-        ]);
+        $this->configuration = AmqpConfiguration::parse(self::getAmqpServerParameters());
     }
 
     public function testFactoryCanCreateQueue()
     {
+        self::skipIfAmqpServerIsUnavailable();
+
         $that = $this;
 
         $handler = $this->prophesize(MessageHandler::class);

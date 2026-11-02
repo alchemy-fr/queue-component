@@ -1,31 +1,30 @@
 {
-  "name": "alchemy/queue-component",
-  "type": "library",
-  "description": "Message queue component",
-  "keywords": [],
-  "license": "MIT",
-  "minimum-stability": "stable",
-  "require": {
-    "php": ">=5.5",
-    "ramsey/uuid": "^3.3",
-    "psr/log": "^1.0"
-  },
-  "require-dev": {
-    "empi89/php-amqp-stubs": "dev-master",
-    "mikey179/vfsstream": "^1.6",
-    "phpunit/phpunit": "^4.0|^5.0"
-  },
-  "suggest": {
-    "ext-amqp": "To use the AMQP extension adapters"
-  },
-  "autoload": {
-    "psr-4": {
-      "Alchemy\\Queue\\": "src/"
+    "name": "alchemy/queue-component",
+    "type": "library",
+    "description": "Message queue component",
+    "keywords": [],
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^8.2",
+        "ramsey/uuid": "^4.7",
+        "psr/log": "^1.0 || ^2.0 || ^3.0"
+    },
+    "require-dev": {
+        "phpspec/prophecy-phpunit": "^2.3",
+        "phpunit/phpunit": "^11.5"
+    },
+    "suggest": {
+        "ext-amqp": "To use the AMQP extension adapters"
+    },
+    "autoload": {
+        "psr-4": {
+            "Alchemy\\Queue\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Alchemy\\Queue\\Tests\\": "tests/"
+        }
     }
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "0.2.x-dev"
-    }
-  }
 }

@@ -6,8 +6,10 @@ use Alchemy\Queue\Message;
 use Alchemy\Queue\MessageHandler;
 use Alchemy\Queue\MessageHandlerResolver;
 
-class MessageHandlerResolverTest extends \PHPUnit_Framework_TestCase
+class MessageHandlerResolverTest extends \PHPUnit\Framework\TestCase
 {
+    use \Prophecy\PhpUnit\ProphecyTrait;
+
     public function testHandlerCanBeAddedToResolver()
     {
         $handler = $this->prophesize(MessageHandler::class)->reveal();
@@ -47,7 +49,7 @@ class MessageHandlerResolverTest extends \PHPUnit_Framework_TestCase
         $handler->accepts($message)->willReturn(false);
         $resolver->addHandler($handler->reveal());
 
-        $this->assertEquals($default, $resolver->resolveHandler($message));
-        $this->assertNotEquals($handler->reveal(), $resolver->resolveHandler($message));
+        $this->assertSame($default, $resolver->resolveHandler($message));
+        $this->assertNotSame($handler->reveal(), $resolver->resolveHandler($message));
     }
 }

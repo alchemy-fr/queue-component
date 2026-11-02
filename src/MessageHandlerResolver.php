@@ -14,7 +14,7 @@ class MessageHandlerResolver
      */
     private $fallbackHandler;
 
-    public function __construct(MessageHandler $defaultHandler = null)
+    public function __construct(?MessageHandler $defaultHandler = null)
     {
         $this->fallbackHandler = $defaultHandler ?: new NullMessageHandler();
     }

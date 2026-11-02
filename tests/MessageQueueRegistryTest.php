@@ -5,8 +5,9 @@ namespace Alchemy\Queue\Tests;
 use Alchemy\Queue\MessageQueue;
 use Alchemy\Queue\MessageQueueRegistry;
 
-class MessageQueueRegistryTest extends \PHPUnit_Framework_TestCase
+class MessageQueueRegistryTest extends \PHPUnit\Framework\TestCase
 {
+    use RequiresAmqpServer;
 
     public function testRegistryIsInitiallyEmpty()
     {
@@ -17,9 +18,11 @@ class MessageQueueRegistryTest extends \PHPUnit_Framework_TestCase
 
     public function testQueuesCanBeRegisteredUsingConfigArray()
     {
+        self::skipIfAmqpServerIsUnavailable();
+
         $registry = new MessageQueueRegistry();
 
-        $registry->bindConfiguration('default-queue', []);
+        $registry->bindConfiguration('default-queue', self::getAmqpServerParameters());
 
         $this->assertTrue($registry->hasQueue('default-queue'));
         $this->assertInstanceOf(MessageQueue::class, $registry->getQueue('default-queue'));

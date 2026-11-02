@@ -4,7 +4,7 @@ namespace Alchemy\Queue\Tests;
 use Alchemy\Queue\Message;
 use Alchemy\Queue\NullMessageHandler;
 
-class NullMessageHandlerTest extends \PHPUnit_Framework_TestCase
+class NullMessageHandlerTest extends \PHPUnit\Framework\TestCase
 {
     public function testAlwaysAcceptsMessage()
     {
@@ -20,12 +20,14 @@ class NullMessageHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = new NullMessageHandler();
 
         // Test will error if handle calls any message methods
-        $handler->handle($message);
+        $this->assertNull($handler->handle($message));
     }
 }
 
 class ForbiddenMessage extends Message
 {
+    private $test;
+
     public function __construct(\Alchemy\Queue\Tests\NullMessageHandlerTest $test)
     {
         $this->test = $test;
