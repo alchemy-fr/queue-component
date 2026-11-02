@@ -4,7 +4,7 @@ namespace Alchemy\Queue\Tests\Amqp;
 
 use Alchemy\Queue\Amqp\AmqpConfiguration;
 
-class AmqpConfigurationTest extends \PHPUnit_Framework_TestCase
+class AmqpConfigurationTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testHasDefaultValues()

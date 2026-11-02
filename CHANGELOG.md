@@ -4,6 +4,12 @@
 
 No unreleased changes
 
+## 5.0.0
+
+- Require PHP 8.2+, ramsey/uuid 4.7 and psr/log 1, 2 or 3.
+- Support ext-amqp 2.x: `AmqpMessageQueue::publish()` throws `MessagePublishingException` when the exchange fails.
+- `setLogger()` methods return `void`.
+
 ## [0.1.5] - 2016-10-05
 ### Added
   - `MessageQueueRegistry::getConfigurations()` to retrieve available queue configurations

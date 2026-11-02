@@ -16,7 +16,7 @@ class NullMessageHandler implements MessageHandler, LoggerAwareInterface
      */
     private $logger;
 
-    public function __construct(LoggerInterface $logger = null)
+    public function __construct(?LoggerInterface $logger = null)
     {
         $this->logger = $logger ?: new NullLogger();
     }
@@ -25,9 +25,8 @@ class NullMessageHandler implements MessageHandler, LoggerAwareInterface
      * Sets a logger instance on the object
      *
      * @param LoggerInterface $logger
-     * @return null
      */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }

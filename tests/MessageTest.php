@@ -4,7 +4,7 @@ namespace Alchemy\Queue\Tests;
 
 use Alchemy\Queue\Message;
 
-class MessageTest extends \PHPUnit_Framework_TestCase
+class MessageTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testMessageHasBody()

@@ -40,9 +40,8 @@ class AmqpMessageQueue implements MessageQueue, LoggerAwareInterface
      * Sets a logger instance on the object
      *
      * @param LoggerInterface $logger
-     * @return null
      */
-    public function setLogger(LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
     }
@@ -55,10 +54,10 @@ class AmqpMessageQueue implements MessageQueue, LoggerAwareInterface
         $this->logger->debug('Publishing message to queue: ' . $this->queue->getName());
 
         $attributes = ['correlation_id' => $message->getCorrelationId()];
-        $result = $this->exchange->publish($message->getBody(), $this->queue->getName(), AMQP_DURABLE, $attributes);
-
-        if (! $result) {
-            throw new MessagePublishingException();
+        try {
+            $this->exchange->publish($message->getBody(), $this->queue->getName(), AMQP_DURABLE, $attributes);
+        } catch (\AMQPException $exception) {
+            throw new MessagePublishingException($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 
@@ -83,7 +82,7 @@ class AmqpMessageQueue implements MessageQueue, LoggerAwareInterface
             }
 
             return false;
-        }, AMQP_NOPARAM, Uuid::uuid4());
+        }, AMQP_NOPARAM, Uuid::uuid4()->toString());
     }
 
     private function ackMessage(\AMQPQueue $queue, \AMQPEnvelope $envelope)
